@@ -8,7 +8,6 @@
 
 import UIKit
 
-<<<<<<< HEAD
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource  {
 
     @IBOutlet weak var profilePictureImageView: UIImageView!
@@ -41,18 +40,6 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         repositoriesTableView.delegate = self
         repositoriesTableView.dataSource = self
-=======
-class ProfileViewController: UIViewController {
-
-    @IBOutlet weak var usernameLabel: UILabel!
-    
-    var username = String()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        usernameLabel.text = username
->>>>>>> master
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,7 +47,6 @@ class ProfileViewController: UIViewController {
         // Show the Navigation Bar
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
-<<<<<<< HEAD
 
     func profileParser() {
         let urlString = "https://api.github.com/users/\(username)"
@@ -76,12 +62,12 @@ class ProfileViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.profilePictureImageView.downloaded(from: profile.profilePicture)
                     self.fullnameLabel.text = profile.fullName
-                    if profile.publicRepositories != nil {
-                        self.repositoriesCountLabel.text = String(profile.publicRepositories!)
-                    } else { return }
-                    if profile.followers != nil {
-                        self.followersCountLabel.text = String(profile.followers!)
-                    } else { return }
+
+                    guard profile.publicRepositories != nil else { return }
+                    self.repositoriesCountLabel.text = String(profile.publicRepositories!)
+                    
+                    guard profile.followers != nil else { return }
+                    self.followersCountLabel.text = String(profile.followers!)
                 }
             } catch let error {
                 print(error)
@@ -120,9 +106,10 @@ class ProfileViewController: UIViewController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // create a new cell if needed or reuse an old one
         let cell = self.repositoriesTableView.dequeueReusableCell(withIdentifier: Identifier.RepoTableViewCell, for: indexPath) as! RepoTableViewCell
-        // set the text from the data model
-        cell.repoNameLabel.text = repositories[indexPath.row].name
-        cell.starsCountLabel.text = "\(repositories[indexPath.row].starsCount!)"
+        // get repository property
+        let repository = self.repositories[indexPath.row]
+        // update cell with repository prop
+        cell.setRepository(repo: repository)
         return cell
     }
     
@@ -130,6 +117,4 @@ class ProfileViewController: UIViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
     }
-=======
->>>>>>> master
 }
